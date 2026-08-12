@@ -1,0 +1,281 @@
+# Password Manager - Vulnerability Report
+
+## 1. Introduction
+
+This project implements a simple Password Manager in Python for demonstrating application security concepts and Static Application Security Testing (SAST).
+
+The application stores usernames, website names, and passwords using an SQLite database.
+
+For this assignment, the application intentionally contains the following security vulnerabilities:
+
+1. Missing Authentication
+2. Information Leakage
+3. Insecure Storage
+
+Bandit is used as the SAST tool to statically analyze the Python source code.
+
+---
+
+# 2. Application Overview
+
+The Password Manager provides three main functions:
+
+* Add a username, website, and password.
+* View all stored credentials.
+* Search for credentials using a website name.
+
+The application uses SQLite for storing the data.
+
+The application was intentionally kept simple so that the security concepts can be demonstrated clearly.
+
+---
+
+# 3. Vulnerability 1 - Missing Authentication
+
+## Description
+
+The application does not implement any authentication mechanism.
+
+When the program is started, the user is directly presented with the application menu. There is no username/password login, session validation, or other identity verification.
+
+## Vulnerable Behavior
+
+A user can start the program and immediately select:
+
+`2 - View Passwords`
+
+without providing any credentials.
+
+## Impact
+
+Anyone who has access to the application can access the stored credentials.
+
+This can result in unauthorized access to usernames, websites, and passwords.
+
+## Evidence
+
+The application displays the main menu immediately after startup without requesting authentication.
+
+Example:
+
+`===== PASSWORD MANAGER =====`
+
+`1. Add Password`
+
+`2. View Passwords`
+
+`3. Search Password`
+
+`4. Exit`
+
+## Severity
+
+**High**
+
+Because the application contains sensitive authentication credentials, lack of access control can allow unauthorized users to access all stored credentials.
+
+## Recommended Remediation
+
+Implement an authentication mechanism before allowing access to stored passwords.
+
+For example:
+
+* Require a username and password before accessing the password manager.
+* Store authentication credentials securely.
+* Use proper session/access-control mechanisms.
+* Restrict password viewing operations to authenticated users.
+
+---
+
+# 4. Vulnerability 2 - Information Leakage
+
+## Description
+
+The application directly displays sensitive passwords in the terminal when credentials are viewed or searched.
+
+## Vulnerable Code
+
+The application contains code equivalent to:
+
+`print("Password:", password)`
+
+This exposes the password directly to the screen.
+
+## Impact
+
+Sensitive credentials can be exposed to anyone who can see the terminal or application output.
+
+This violates the principle of minimizing exposure of sensitive information.
+
+## Evidence
+
+When the user selects `View Passwords`, the application displays output such as:
+
+`Username: testuser`
+
+`Website: gmail.com`
+
+`Password: MySecret123`
+
+The password is therefore visible in plaintext.
+
+## Severity
+
+**High**
+
+Passwords are sensitive authentication information. Exposing them unnecessarily can allow unauthorized users to obtain the credentials.
+
+## Recommended Remediation
+
+Passwords should not normally be displayed in plaintext.
+
+Possible improvements include:
+
+* Mask passwords when displaying them.
+* Require authentication before revealing a password.
+* Display only the required information.
+* Avoid printing sensitive credentials in logs or terminal output.
+
+---
+
+# 5. Vulnerability 3 - Insecure Storage
+
+## Description
+
+The application stores passwords directly in an SQLite database in plaintext.
+
+No hashing, encryption, or other protection is applied to the stored passwords.
+
+## Vulnerable Behavior
+
+The password entered by the user is inserted directly into the database.
+
+Conceptually:
+
+`INSERT INTO passwords (..., password) VALUES (..., password)`
+
+The original password can therefore be recovered directly from the database.
+
+## Evidence
+
+After adding a password, the SQLite database can be opened and queried using:
+
+`SELECT * FROM passwords;`
+
+The output contains the original password.
+
+Example:
+
+`1 | testuser | gmail.com | MySecret123`
+
+This demonstrates that the password is stored as plaintext.
+
+## Impact
+
+If an attacker obtains the database file, they can read all stored passwords directly.
+
+This is particularly dangerous because users may reuse passwords on multiple websites.
+
+## Severity
+
+**Critical / High**
+
+A database compromise can expose all stored credentials in their original form.
+
+## Recommended Remediation
+
+In a real password manager, sensitive data must be protected using appropriate cryptographic mechanisms.
+
+Depending on the design:
+
+* Encrypt sensitive stored data.
+* Protect the encryption key appropriately.
+* Never store passwords in plaintext.
+* Use a secure password-based key derivation function for protecting authentication secrets.
+* Introduce cryptographic protection before considering the application production-ready.
+
+Cryptography is intentionally not implemented in this version because it is introduced later in the assignment.
+
+---
+
+# 6. SAST Analysis Using Bandit
+
+Bandit was used to perform static security analysis of the Python source code.
+
+The scan was performed using:
+
+`bandit -r ../src/ -f txt -o bandit_report.txt`
+
+The `-r` option recursively scans the specified source directory.
+
+The `-f txt` option specifies text output.
+
+The `-o` option saves the result to a file.
+
+The generated report is stored in:
+
+`sast/bandit_report.txt`
+
+---
+
+# 7. Bandit Findings
+
+The Bandit findings should be documented here based on the actual output generated during the scan.
+
+For each Bandit finding, the following information should be recorded:
+
+* Bandit test ID
+* Vulnerable line
+* Description
+* Severity
+* Confidence
+* Recommended remediation
+
+Example format:
+
+| Bandit ID | Issue                      | Severity    | Confidence  |
+| --------- | -------------------------- | ----------- | ----------- |
+| Bxxx      | Finding reported by Bandit | Medium/High | Medium/High |
+
+The exact findings should be taken from `sast/bandit_report.txt`.
+
+---
+
+# 8. Limitations of SAST
+
+Bandit uses predefined security checks to identify suspicious Python coding patterns.
+
+Therefore, Bandit does not necessarily detect every vulnerability present in an application.
+
+In particular, application-level vulnerabilities such as missing authentication may require manual security testing and code review.
+
+Therefore, this project uses both:
+
+* SAST analysis using Bandit
+* Manual testing of the application's security behavior
+
+This demonstrates an important security principle: automated SAST tools are useful for identifying known insecure coding patterns, but they do not replace manual security analysis.
+
+---
+
+# 9. Overall Risk Summary
+
+| Vulnerability          | Risk               | Detection Method                  |
+| ---------------------- | ------------------ | --------------------------------- |
+| Missing Authentication | High               | Manual testing / code review      |
+| Information Leakage    | High               | Manual testing / code review      |
+| Insecure Storage       | High/Critical      | Database inspection / code review |
+| Bandit-detected issues | Depends on finding | Bandit SAST                       |
+
+---
+
+# 10. Conclusion
+
+The Password Manager successfully demonstrates three intentionally introduced security vulnerabilities: missing authentication, information leakage, and insecure storage.
+
+Manual testing demonstrates the actual security impact of these vulnerabilities, while Bandit provides automated static analysis of the Python source code.
+
+The application is intentionally insecure for educational purposes and should not be used to store real passwords.
+
+Future improvements will include authentication, secure storage, protection of sensitive information, and cryptographic mechanisms as covered in later parts of the assignment.
+
