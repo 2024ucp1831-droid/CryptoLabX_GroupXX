@@ -1,7 +1,0 @@
-src/
-│ ├── reports/
-│ ├── screenshots/
-│ ├── sast/
-│ ├── outputs/
-│ ├── testcases/
-│ └── README.md
