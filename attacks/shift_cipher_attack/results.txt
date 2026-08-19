@@ -1,0 +1,21 @@
+SHIFT CIPHER CRYPTANALYSIS RESULTS
+====================================
+
+Ciphertext:
+KHOOR ZRUOG
+
+DICTIONARY SCORING
+------------------
+Predicted Key: 3
+Dictionary Score: 2
+Plaintext: HELLO WORLD
+
+CHI-SQUARE ANALYSIS
+-------------------
+Predicted Key: 6
+Chi-Square Value: 24.0081
+Plaintext: EBIIL TLOIA
+
+COMPARISON
+----------
+The two methods predicted different keys.
