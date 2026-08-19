@@ -1,48 +1,117 @@
+# brute_force_dictionary.py
+
 import os
-import re
+import sys
+
+# Allow importing shift_cipher.py
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 from shift_cipher import decrypt
 
-DICTIONARY_FILE = os.path.join(
-    os.path.dirname(os.path.dirname(__file__)),
-    "dictionary",
-    "english_words.txt"
-)
+
+def load_dictionary(dictionary_file):
+    """
+    Load English words from dictionary file.
+    """
+
+    words = set()
+
+    try:
+        with open(dictionary_file, "r", encoding="utf-8") as file:
+
+            for line in file:
+                word = line.strip().lower()
+
+                if word:
+                    words.add(word)
+
+    except FileNotFoundError:
+        print("Dictionary file not found!")
+        return set()
+
+    return words
 
 
-def load_dictionary():
-    with open(DICTIONARY_FILE, "r") as file:
-        return set(word.strip().lower() for word in file)
+def dictionary_score(text, dictionary):
+    """
+    Count how many words in the text
+    are present in the dictionary.
+    """
+
+    words = text.lower().split()
+
+    score = 0
+
+    for word in words:
+
+        # Remove punctuation
+        cleaned_word = ""
+
+        for char in word:
+            if char.isalpha():
+                cleaned_word += char
+
+        if cleaned_word in dictionary:
+            score += 1
+
+    return score
 
 
-def score_text(text, dictionary):
-    words = re.findall(r"[a-zA-Z]+", text.lower())
-    return sum(1 for word in words if word in dictionary)
+def brute_force_dictionary(ciphertext, dictionary_file):
 
+    dictionary = load_dictionary(dictionary_file)
 
-def dictionary_attack(ciphertext):
-    dictionary = load_dictionary()
-
-    best_key = 0
-    best_score = -1
-    best_plaintext = ""
+    results = []
 
     for key in range(26):
+
         plaintext = decrypt(ciphertext, key)
-        score = score_text(plaintext, dictionary)
 
-        if score > best_score:
-            best_score = score
-            best_key = key
-            best_plaintext = plaintext
+        score = dictionary_score(
+            plaintext,
+            dictionary
+        )
 
-    return best_key, best_plaintext, best_score
+        results.append({
+            "key": key,
+            "plaintext": plaintext,
+            "score": score
+        })
+
+    # Highest dictionary score
+    best_result = max(
+        results,
+        key=lambda x: x["score"]
+    )
+
+    return best_result, results
 
 
 if __name__ == "__main__":
+
     ciphertext = input("Enter ciphertext: ")
 
-    key, plaintext, score = dictionary_attack(ciphertext)
+    dictionary_file = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        "dictionary",
+        "english_words.txt"
+    )
 
-    print("Predicted Key:", key)
-    print("Plaintext:", plaintext)
-    print("Dictionary Score:", score)
+    best, results = brute_force_dictionary(
+        ciphertext,
+        dictionary_file
+    )
+
+    print("\n===== DICTIONARY SCORING =====")
+
+    for result in results:
+
+        print(
+            f"Key: {result['key']:2d} | "
+            f"Score: {result['score']:3d} | "
+            f"{result['plaintext']}"
+        )
+
+    print("\nBest Key:", best["key"])
+    print("Best Score:", best["score"])
+    print("Recovered Plaintext:", best["plaintext"])
