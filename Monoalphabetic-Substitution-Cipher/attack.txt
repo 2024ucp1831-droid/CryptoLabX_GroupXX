@@ -1,0 +1,42 @@
+Perfectly Secret Encryption 39
+2.8 Let Π denote the Vigen`ere cipher where the message space consists of all
+3-character strings (over the English alphabet), and the key is generated
+by ﬁrst choosing the period t uniformly from {1, 2, 3} and then letting
+the key be a uniform string of length t.
+(a) Deﬁne A as follows: A outputs m0 = aab and m1 = abb. When
+given a ciphertext c, it outputs 0 if the ﬁrst character of c is the
+same as the second character of c, and outputs 1 otherwise. Com-
+pute Pr[PrivKeav
+A,Π = 1].
+(b) Construct and analyze an adversary A′ for which Pr[PrivKeav
+A′ ,Π = 1]
+is greater than your answer from part (a).
+2.9 In this exercise, we look at diﬀerent conditions under which the shift,
+mono-alphabetic substitution, and Vigen`ere ciphers are perfectly secret:
+(a) Prove that if only a single character is encrypted, then the shift
+cipher is perfectly secret.
+(b) What is the largest message space M for which the mono-alphabetic
+substitution cipher provides perfect secrecy?
+(c) Prove that the Vigen`ere cipher using (ﬁxed) period t is perfectly
+secret when used to encrypt messages of length t.
+Reconcile this with the attacks shown in the previous chapter.
+2.10 Prove that a scheme satisfying Deﬁnition 2.5 must have |K| ≥ |M|
+without using Lemma 2.4. Speciﬁcally, let Π be an arbitrary encryption
+scheme with |K| < |M|. Show an A for which Pr [PrivKeav
+A,Π = 1] > 1
+2 .
+Hint: It may be easier to let A be randomized.
+2.11 Assume we require only that an encryption scheme (Gen, Enc, Dec) with
+message space M satisfy the following: For all m ∈ M, we have
+Pr[DecK (EncK (m)) = m] ≥ 2−t. (This probability is taken over choice
+of the key as well as any randomness used during encryption.) Show
+that perfect secrecy can be achieved with |K| < |M| when t ≥ 1. Prove
+a lower bound on the size of K in terms of t.
+2.12 Let ε ≥ 0 be a constant. Say an encryption scheme is ε-perfectly secret
+if for every adversary A it holds that
+Pr [PrivKeav
+A,Π = 1] ≤ 1
+2 + ε .
+(Compare to Deﬁnition 2.5.) Show that ε-perfect secrecy can be achieved
+with |K| < |M| when ε > 0. Prove a lower bound on the size of K in
+terms of ε.
