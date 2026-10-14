@@ -1,202 +1,117 @@
-Playfair Cipher in C++
+Cryptography Lab
 
-A C++ implementation of the Playfair Cipher encryption and decryption algorithm.
+Welcome to the Cryptography Lab! 🔐
 
-This program generates a 5×5 Playfair key matrix, preprocesses the plaintext, creates digraphs, encrypts and decrypts messages, performs digraph frequency analysis, and verifies the encryption/decryption process.
+This repository documents our learning journey in cryptography, cybersecurity, and secure software development. The lab focuses on understanding cryptographic algorithms, exploring classical ciphers, performing cryptanalysis, and learning practical security tools and techniques through hands-on exercises.
+📚 What We Learn Here
 
-Features
+In this lab, we explore the fundamentals of cryptography and cybersecurity, including:
 
-Generate a 5×5 Playfair key matrix
+    Version Control with Git — Learning how to use Git, track changes, and manage project versions through commits.
+    Bandit Wargame — Practicing Linux commands, terminal navigation, and basic security concepts through hands-on challenges.
+    Static Application Security Testing (SAST) — Using SAST tools to analyze source code, identify potential vulnerabilities, and understand secure coding practices.
+    Classical Cryptography — Studying traditional encryption techniques and understanding their strengths and weaknesses.
+    Cryptanalysis — Exploring techniques used to analyze ciphertext and recover information without knowing the original key.
+    Modern Cryptographic Concepts — Understanding security vulnerabilities and attack techniques related to cryptographic implementations.
 
-Convert J to I
+✅ Topics Covered So Far
 
-Remove spaces and special characters
+The following topics and techniques have been covered in the lab:
+1. Git and Version Control
 
-Handle repeated letters by inserting X
+    Understanding Git fundamentals.
+    Tracking changes in a repository.
+    Creating and managing commits.
+    Maintaining a structured development workflow.
 
-Handle odd-length plaintext
+2. Bandit Wargame
 
-Encrypt plaintext using Playfair Cipher rules
+    Solving hands-on cybersecurity challenges.
+    Practicing Linux commands and terminal operations.
+    Learning basic techniques for navigating and exploring a Linux environment.
 
-Decrypt ciphertext
+3. Static Application Security Testing (SAST)
 
-Perform digraph frequency analysis
+    Understanding the fundamentals of SAST.
+    Using static analysis tools to examine source code.
+    Identifying potential security vulnerabilities and coding weaknesses.
 
-Verify the result by re-encrypting the decrypted text
+4. Monoalphabetic Substitution Cipher
 
-Requirements
+    Understanding the working principles of monoalphabetic substitution.
+    Encrypting and decrypting messages using substitution techniques.
+    Performing cryptanalysis using frequency analysis and pattern analysis.
+    Identifying weaknesses in substitution-based encryption.
 
-Linux, macOS, or Windows
+5. Kasiski Examination
 
-C++ compiler with C++11 or later
+    Understanding the principles behind Kasiski analysis.
+    Identifying repeated sequences in ciphertext.
+    Estimating the key length of polyalphabetic ciphers.
+    Applying cryptanalysis techniques to investigate repeating-key encryption.
 
-g++ recommended for Linux
+6. Vigenère Cipher
 
-Files
-playfair.cpp
-README.md
+    Understanding the Vigenère cipher and its encryption mechanism.
+    Encrypting and decrypting messages using a repeating keyword.
+    Exploring the relationship between the Vigenère cipher and polyalphabetic substitution.
+    Analyzing the cipher's weaknesses using cryptanalysis techniques.
 
-Compilation
+7. Playfair Cipher
 
-Open a terminal in the project directory and run:
+    Understanding the Playfair cipher and its digraph-based encryption process.
+    Constructing a key matrix.
+    Encrypting and decrypting pairs of letters.
+    Exploring the security properties and limitations of digraph substitution.
 
-g++ playfair.cpp -o playfair
+8. Padding Oracle Attack
 
-Running the Program
+    Understanding the concept of padding in cryptographic encryption schemes.
+    Exploring how padding validation can reveal information about decrypted ciphertext.
+    Learning the principles behind padding oracle vulnerabilities.
+    Understanding the importance of secure cryptographic implementations and proper error handling.
 
-After compilation, run:
+🎯 Objectives
 
-./playfair
+The primary objectives of this lab are to:
 
-Example Input
-Keyword: MONARCHY
-Plaintext: INSTRUMENTS
+    Develop a strong foundation in cryptography and cryptanalysis.
+    Understand how classical encryption algorithms work.
+    Identify weaknesses in cryptographic algorithms and implementations.
+    Gain practical experience with cybersecurity tools and techniques.
+    Learn to use Git for version control and project management.
+    Understand how static analysis can help identify software vulnerabilities.
+    Explore cryptographic attacks in controlled, educational environments.
+    Develop a security-oriented mindset by understanding both defensive and offensive techniques.
 
-Key Matrix
+📁 Repository Structure
 
-For the keyword MONARCHY, the generated matrix is:
+The repository may be organized into directories based on the topics covered:
 
-M O N A R
-C H Y B D
-E F G I K
-L P Q S T
-U V W X Z
-
-Prepared Digraphs
-
-The plaintext:
-
-INSTRUMENTS
-
-
-is divided into:
-
-IN ST RU ME NT SX
-
-
-The final X is padding because the plaintext has an odd number of characters.
-
-Example Output
-Key Matrix
-M O N A R
-C H Y B D
-E F G I K
-L P Q S T
-U V W X Z
-
-Prepared Digraphs:
-IN ST RU ME NT SX
-
-Ciphertext:
-GATLMZCLRQXA
-
-Decrypted Text:
-INSTRUMENTSX
-
-Digraph Frequency Analysis:
-CL: 1
-GA: 1
-MZ: 1
-RQ: 1
-TL: 1
-XA: 1
-
-Verification:
-SUCCESS
-
-Playfair Cipher Rules
-
-Each pair of letters is encrypted according to one of three rules.
-
-1. Same Row
-
-If both letters are in the same row, replace each letter with the letter immediately to its right.
-
-The row wraps around from the last column to the first.
-
-2. Same Column
-
-If both letters are in the same column, replace each letter with the letter immediately below it.
-
-The column wraps around from the last row to the first.
-
-3. Rectangle Rule
-
-If the letters are in different rows and columns, form a rectangle using their positions.
-
-Each letter is replaced by the letter in the same row but the other letter's column.
-
-Plaintext Processing
-
-The program performs the following preprocessing:
-
-Converts letters to uppercase.
-
-Removes spaces and special characters.
-
-Converts J to I.
-
-Splits the plaintext into pairs.
-
-Inserts X between repeated letters.
-
-Adds X at the end if the plaintext has an odd number of characters.
-
-For example:
-
-BALLOON
-
-
-is processed into:
-
-BA LX LO ON
-
-Verification
-
-The program verifies the result by:
-
-Plaintext
-    ↓
-Encryption
-    ↓
-Ciphertext
-    ↓
-Decryption
-    ↓
-Re-encryption
-    ↓
-Compare with original ciphertext
-
-
-If both ciphertexts match, the program displays:
-
-Verification:
-SUCCESS
-
-
-Otherwise:
-
-Verification:
-FAILED
-
-Functions
-
-The program contains the following main functions:
-
-generate_key_matrix()
-prepare_plaintext()
-create_digraphs()
-playfair_encrypt()
-playfair_decrypt()
-digraph_frequency()
-verify()
-
-Project Structure
-Playfair-Cipher/
-│
-├── playfair.cpp
+Cryptography-Lab/
+├── Git/
+├── Bandit/
+├── SAST/
+├── Monoalphabetic-Substitution/
+├── Kasiski-Analysis/
+├── Vigenere-Cipher/
+├── Playfair-Cipher/
+├── Padding-Oracle/
 └── README.md
 
-License
+Each directory can contain relevant code, practical exercises, notes, experiments, and documentation associated with the corresponding topic.
 
-This project is intended for educational purposes.
+Note: This is a suggested structure and can be adjusted to match the actual organization of the repository.
+🚀 Learning Approach
+
+The lab follows a hands-on approach to learning. Each topic combines theoretical concepts with practical exercises to help us understand how security mechanisms work and how vulnerabilities can be identified and analyzed.
+
+We aim to move beyond simply understanding algorithms by exploring their implementation, limitations, and potential weaknesses.
+⚠️ Disclaimer
+
+This repository is intended for educational and academic purposes only. All cryptographic attacks, security analysis, and vulnerability testing should be performed in authorized lab environments or on systems for which explicit permission has been granted.
+📌 Progress
+
+This README documents the topics covered so far and will be updated as we explore additional cryptographic algorithms, cryptanalysis techniques, cybersecurity tools, and security concepts.
+
+Learn. Experiment. Analyze. Secure. 🔐
